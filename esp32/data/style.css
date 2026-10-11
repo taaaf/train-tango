@@ -1,0 +1,1083 @@
+@font-face {
+  font-family: "HostGrotesk";
+  src: url("HostGrotesk-SemiBold.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  font-family:
+    "HostGrotesk",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: #11151c;
+  color: #eef2f7;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html {
+  font-size: clamp(9px, min(1.7vh, 3vw), 24px);
+}
+body {
+  font-size: 16px;
+}
+
+.screen {
+  height: 100%;
+  height: 100dvh;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* An author `display` rule beats the user-agent [hidden] rule, and .upg sets display:flex
+   -- so a powerup this phone was not dealt would stay on screen without this. */
+[hidden] {
+  display: none !important;
+}
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top) 1.4rem env(safe-area-inset-bottom);
+}
+.intro1-logo {
+  width: auto;
+  height: min(18vh, 180px);
+}
+.intro2-title {
+  width: min(86vw, 640px);
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+.tap-to-join {
+  position: absolute;
+  bottom: max(18vh, calc(2rem + env(safe-area-inset-bottom)));
+  padding: 0.6rem 1.2rem;
+  border: 1.5px solid #fff;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #fff;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+#lobby {
+  display: flex;
+  justify-content: center;
+  background: #000;
+}
+.lobby-inner {
+  position: relative;
+  width: 100%;
+  max-width: 33.3rem;
+  height: 100%;
+  padding: max(1.3rem, env(safe-area-inset-top)) 1.4rem calc(1.3rem + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  color: #dadada;
+}
+
+.clock {
+  position: absolute;
+  top: max(1.3rem, env(safe-area-inset-top));
+  left: 1.4rem;
+  color: #585858;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  z-index: 5;
+}
+
+.help-btn {
+  position: absolute;
+  top: max(1.3rem, env(safe-area-inset-top));
+  right: 1.4rem;
+  margin: 0;
+  padding: 0.5rem 0.82rem;
+  border: 1.5px solid #585858;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #dadada;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  z-index: 5;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+.lobby-title {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 3.4rem;
+  line-height: 0.8;
+  margin: 4.8rem 0 2.6rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+h2 {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8a97a8;
+}
+
+.status {
+  color: #ffd24a;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.status:empty {
+  display: none;
+}
+
+.muted {
+  color: #8a97a8;
+  font-size: 14px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2.4rem;
+}
+.info-row {
+  display: flex;
+  align-items: flex-end;
+}
+.info-row .label {
+  font-size: 1.16rem;
+  line-height: 0.62;
+  color: #dadada;
+  padding-left: 0.6rem;
+  padding-bottom: 0;
+  border-bottom: 2px solid #dadada;
+  white-space: nowrap;
+}
+.info-row .lead {
+  flex: 1;
+  align-self: flex-end;
+  border-bottom: 2px solid #dadada;
+}
+.info-row .val {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 1.4rem;
+  line-height: 0.72;
+  padding-left: 0.6rem;
+  color: #dadada;
+  white-space: nowrap;
+}
+/* The solid frame is the play area -- the table the phones get laid out on. The cells
+   inside are its four places, taken or free.
+   Square, and floated to the middle of whatever room is left rather than stretched to fill
+   it: the frame is a picture of the table, and a tall thin one stops looking like one. The
+   auto margins do the centring; flex-shrink still lets it give up height on a short screen
+   instead of pushing .lobby-bottom off the bottom. */
+.device-area {
+  flex: 0 1 auto;
+  aspect-ratio: 1;
+  min-height: 0;
+  margin: auto 0;
+  display: flex;
+  border: 1.5px solid #ffffff;
+  border-radius: 0.9rem;
+  padding: 0.8rem;
+}
+
+/* Four slots, four cells. min-height:0 lets the grid give up height on a short screen
+   instead of pushing .lobby-bottom off the bottom -- the icons are sized in % so the cells
+   stay legible all the way down. */
+.device-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.8rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.phone-item {
+  display: block;
+  padding: 0;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.7rem;
+  height: 100%;
+}
+.phone-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  height: 100%;
+  box-sizing: border-box;
+  background: #000;
+  border: 1.5px solid #dadada;
+  border-radius: 0.7rem;
+  padding: 0.7rem;
+  touch-action: pan-y;
+  will-change: transform;
+  transition: transform 0.18s ease;
+}
+
+/* The slot's shape. A mask rather than an <img> because the fill baked into the SVG
+   (#D9D9D9) is not the colour we want -- background-color supplies it instead. Shape alone
+   identifies a player here; the palette colours only appear on the board. */
+.pslot-icon {
+  display: block;
+  width: min(52%, 4.6rem);
+  aspect-ratio: 1;
+  flex: 0 1 auto;
+  background-color: #fff;
+  -webkit-mask-image: var(--picon);
+  mask-image: var(--picon);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.pslot-you {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.55rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: #dadada;
+}
+.phone-row .state {
+  font-size: 1.1rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.phone-row .state.ready {
+  color: #34e37a;
+}
+.phone-row .state.waiting {
+  color: #dadada;
+}
+.phone-row.empty {
+  border-style: dashed;
+  border-color: #585858;
+}
+/* Your own shape, leading the in-game HUD row. Sized against the 58px powerup buttons so it
+   reads as a marker rather than a fifth button. */
+.pslot-icon.hud-icon {
+  width: 30px;
+  height: 30px;
+  aspect-ratio: auto;
+}
+
+/* Hidden until setOwnIcon knows which shape you are -- an empty box is better than the
+   wrong one for the moment between joining and being told. */
+.hud-icon {
+  visibility: hidden;
+}
+.has-icon .hud-icon {
+  visibility: visible;
+}
+
+.phone-remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 84px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: #e5484d;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  z-index: 0;
+}
+
+button {
+  margin-top: auto;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  background: #2ecc71;
+  color: #0b1f14;
+}
+
+button:disabled {
+  background: #2a3340;
+  color: #5a6675;
+}
+
+button.is-ready {
+  background: #e67e22;
+  color: #1f1206;
+}
+
+.lobby-bottom {
+  margin-top: auto;
+  padding-top: 1.4rem;
+  overflow: hidden;
+}
+.train {
+  display: block;
+  width: 10.5rem;
+  max-width: 55%;
+  height: auto;
+  margin: 0 0 0.2rem 45%;
+  transform: translateX(0);
+  will-change: transform;
+  transition: transform 0.75s cubic-bezier(0.55, 0, 0.85, 0.15);
+}
+.train rect,
+.train path {
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.train.tg-go {
+  transform: translateX(115vw);
+}
+.train.tg-warp {
+  transition: none;
+  transform: translateX(-115vw);
+}
+.train.tg-enter {
+  transition: transform 0.75s cubic-bezier(0.16, 0.84, 0.3, 1);
+  transform: translateX(0);
+}
+.train rect,
+.train path {
+  stroke: #585858;
+}
+.train.tg-go rect,
+.train.tg-go path {
+  stroke: #dadada;
+}
+
+.ready-toggle {
+  position: relative;
+  height: 5.3rem;
+  border: 2px solid #585858;
+  border-radius: 999px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+.rt-knob {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: -2px;
+  width: calc(50% + 2px);
+  border: 3px solid #ffd21e;
+  border-radius: 999px;
+  background: #000;
+  z-index: 1;
+  pointer-events: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+.ready-toggle.on .rt-knob {
+  transform: translateX(100%);
+  border-color: #34e37a;
+}
+.rt-label {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  z-index: 2;
+  pointer-events: none;
+}
+.rt-left {
+  left: 0;
+  color: #ffd21e;
+}
+.rt-right {
+  right: 0;
+  color: #585858;
+}
+.ready-toggle.on .rt-left {
+  color: #585858;
+}
+.ready-toggle.on .rt-right {
+  color: #34e37a;
+}
+
+.reconnect-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+.reconnect-card {
+  min-width: 78%;
+  padding: 3.6rem 2.6rem;
+  background: #000;
+  border: 2px solid #dadada;
+  border-radius: 1rem;
+  text-align: center;
+  color: #dadada;
+}
+.reconnect-card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #fff;
+  margin-bottom: 0.35rem;
+}
+.reconnect-card p {
+  font-size: 1.25rem;
+  color: #dadada;
+}
+
+#play {
+  position: relative;
+}
+
+#board {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Boost pads are armed by dragging along the rail, so the browser must not take a drag
+     on the board for a pan or a double-tap zoom -- it would cancel the gesture mid-swipe. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hud {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--hud-rot, 90deg));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.upgrades {
+  display: flex;
+  gap: 6px;
+}
+
+/* Score and the powerup buttons on one line. The buttons are 58px tall against the score's
+   ~35px, so centre rather than baseline-align: the number reads against the middle of the
+   row instead of hanging off its top. */
+.hud-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Shown while the board is held waiting for a target. Lives inside .hud so it picks up
+   that phone's outward rotation and reads the right way up for whoever is sitting there.
+   Out of flow and hung off the top of the HUD: .hud is centred on its own box, so a prompt
+   IN the flow would re-centre the stack and slide the score and the powerup row sideways
+   every time one armed. Absolute keeps it a row above, with nothing below it moving. */
+.pu-prompt {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #cfe8ff;
+  background: rgba(20, 30, 45, 0.9);
+  border: 1px solid rgba(122, 200, 255, 0.5);
+  border-radius: 8px;
+  padding: 5px 9px;
+  max-width: 190px;
+  pointer-events: none;
+  animation: upg-pulse 1s ease-in-out infinite;
+}
+
+/* The way out of a hold nobody wants to answer: the prompt is the only thing on a dimmed
+   board that says the game is waiting, so the cancel belongs on it rather than in the
+   menu. Sized well over the 9px text because it is tapped on a phone, and the one piece
+   of the HUD that must take pointer events while a powerup waits. */
+.pu-cancel {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  margin: -3px -4px -3px 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+  border: 1px solid rgba(122, 200, 255, 0.5);
+  border-radius: 7px;
+  background: rgba(10, 16, 26, 0.9);
+  color: #cfe8ff;
+  pointer-events: auto;
+}
+
+.score {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 0 0 auto;
+  color: #ffffff;
+}
+
+/* Out of flow, hanging below the total: a delivery must never nudge the HUD row. Just an
+   anchor -- it has no size of its own and every pop is positioned against it. */
+.score-pops {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: 0;
+  pointer-events: none;
+}
+
+/* One bubble at a time, pinned here. No animation by request: it appears, its number
+   changes in place, and popScore()'s idle timer removes it. */
+.pop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* One shape per slot that contributed to this bubble. */
+.pop-icons {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.pop-icon {
+  width: 13px;
+  height: 13px;
+  aspect-ratio: auto;
+}
+.pop-n {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+}
+@media (max-width: 360px), (max-height: 360px) {
+  .upg {
+    width: 48px;
+    height: 48px;
+  }
+  .upgrades {
+    gap: 4px;
+  }
+  .hud-main {
+    gap: 7px;
+  }
+  #scoreVal {
+    font-size: 22px;
+  }
+  .score-label {
+    font-size: 6px;
+  }
+}
+
+.score-label {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8a97a8;
+}
+
+#scoreVal {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.05;
+  color: #ffffff;
+}
+
+.upg {
+  margin: 0;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  text-align: center;
+  border: none;
+  border-radius: 12px;
+  background: #1b212b;
+  color: #eef2f7;
+  pointer-events: auto;
+}
+
+.upg-label {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#upgrades .upg {
+  border-radius: 50%;
+  position: relative;
+}
+
+/* The ring is one <svg> per button, built by buildRing() and driven a band at a time. It
+   replaced a conic-gradient, which was the right shape for a single arc but the wrong one
+   here: bands with gaps need ~12 colour stops, and conic gradients are not composited, so
+   every snapshot repainted the whole element on the CPU. (That cost is also why the ring
+   has never had a transition -- at 5 Hz one never finished before the next began.) A
+   stroke-dasharray write touches one band and composites, so smoothing these is now
+   affordable if the step ever reads coarse. */
+.upg-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.upg-ring circle {
+  fill: none;
+  stroke-width: 8;
+  /* Must stay butt: a round cap paints a dot for a zero-length dash, so every empty band
+     would show a pip of colour -- exactly the thing these bands replaced. */
+  stroke-linecap: butt;
+}
+
+#upgrades .upg .upg-icon {
+  position: relative;
+  z-index: 1;
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 1;
+}
+
+#upgrades .upg:disabled .upg-icon {
+  opacity: 0.5;
+}
+
+#upgrades .upg.maxed .upg-icon {
+  opacity: 0.4;
+}
+
+.upg:disabled {
+  color: #5a6675;
+}
+
+/* Any powerup waiting for a target tap. Every phone shows this, because the target tap
+   may come from a phone other than the one that bought it. */
+.upg.armed {
+  box-shadow: 0 0 0 2px #4aa8ff, 0 0 12px rgba(74, 168, 255, 0.9);
+  animation: upg-pulse 1s ease-in-out infinite;
+}
+
+@keyframes upg-pulse {
+  50% {
+    box-shadow: 0 0 0 3px #4aa8ff, 0 0 18px rgba(74, 168, 255, 1);
+  }
+}
+
+/* A live powerup keeps its icon at full strength even while its ring drains, so "running"
+   reads differently from "cannot afford". */
+#upgrades .upg.active .upg-icon {
+  opacity: 1;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(8, 10, 14, 0.75);
+  text-align: center;
+}
+
+.menu-overlay button {
+  margin-top: 0;
+  width: auto;
+  min-width: 240px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+#closeMenuBtn {
+  background: #000;
+  color: #eef2f7;
+  border: 2px solid rgba(230, 236, 244, 0.65);
+}
+
+.menu-overlay button.danger {
+  background: #ff5252;
+  color: #0a0f14;
+}
+
+.gameover {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(4, 6, 9, 0.82);
+}
+
+.gameover-card {
+  box-sizing: border-box;
+  width: min(60rem, 94vw);
+  max-height: 94vh;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  /* Roomier than it looks it needs to be: the stencilled title used to hold the top of the
+     card open, and without it the first row sat hard against the border. */
+  padding: 3.4cqw 3.5cqw;
+  border: 2px solid rgba(230, 236, 244, 0.55);
+  border-radius: 3cqw;
+  background: rgba(6, 8, 12, 0.96);
+  text-align: left;
+  overflow: hidden;
+  transform: rotate(var(--go-rot, 0deg));
+}
+
+.gameover.rotated .gameover-card {
+  flex-shrink: 0;
+  width: min(46rem, 80vh);
+  max-width: none;
+  max-height: none;
+  transform: rotate(var(--go-rot, 90deg));
+}
+
+.gameover-info {
+  gap: 2.6cqw;
+  margin-bottom: 1cqw;
+}
+.gameover-info .info-row {
+  min-width: 0;
+}
+.gameover-info .label {
+  font-size: 3.2cqw;
+  line-height: 0.62;
+  padding-left: 1.5cqw;
+  border-bottom-width: 0.35cqw;
+}
+.gameover-info .lead {
+  border-bottom-width: 0.35cqw;
+}
+.gameover-info .val {
+  font-size: 4.2cqw;
+  padding-left: 1.5cqw;
+  color: #eef2f7;
+}
+.gameover-info .val.rank {
+  color: #ffd21e;
+  text-transform: lowercase;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.3em;
+  line-height: 0.9;
+}
+/* The tier number is a Roman numeral, not a word: lowercased along with the rest of the
+   row it stops reading as a one and starts reading as a letter. */
+.gameover-info .val.rank .roman {
+  text-transform: uppercase;
+}
+
+.league-prog {
+  align-self: flex-start;
+  text-align: left;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 2.4cqw;
+  color: #8b97a7;
+  margin-bottom: 5cqw;
+}
+
+.gameover-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 2.5cqw;
+  width: 100%;
+}
+.gameover-actions button {
+  flex: 1;
+  margin: 0;
+  padding: 2.2cqw 1cqw;
+  font-size: 3.4cqw;
+  border-radius: 1.8cqw;
+}
+.gameover-actions button.primary {
+  background: #dadada;
+  color: #000;
+}
+.gameover-actions button.ghost {
+  background: transparent;
+  color: #eef2f7;
+  border: 0.35cqw solid rgba(230, 236, 244, 0.5);
+}
+
+.place-confirm {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  background: transparent;
+}
+
+.place-card {
+  width: 100%;
+  max-width: 268px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 14px 14px;
+  border-radius: 12px;
+  background: #000;
+  border: 2px solid #dadada;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.place-card h2 {
+  margin: 4px 0 0;
+  font-size: 16px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.place-status {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #d6dde5;
+}
+
+.place-card button {
+  width: 100%;
+  padding: 15px;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-weight: 600;
+}
+
+#placeBtn {
+  margin-top: 16px;
+  border-radius: 8px;
+  background: #34e37a;
+}
+
+.place-card button.place-back {
+  width: auto;
+  align-self: flex-start;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: #ff5a4d;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+
+#tutorial {
+  display: flex;
+  justify-content: center;
+  background: #000;
+}
+.tut-inner {
+  position: relative;
+  width: 100%;
+  max-width: 33.3rem;
+  height: 100%;
+  padding: max(1.3rem, env(safe-area-inset-top)) 1.4rem calc(1.3rem + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  color: #dadada;
+}
+
+.tut-back {
+  position: absolute;
+  top: max(1.3rem, env(safe-area-inset-top));
+  left: 1.4rem;
+  margin: 0;
+  padding: 0.5rem 0.82rem;
+  border: 1.5px solid #585858;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #dadada;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1;
+  z-index: 5;
+}
+
+.tut-title {
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 2.8rem;
+  line-height: 0.85;
+  margin: 3.6rem 0 1.8rem;
+  color: #fff;
+}
+
+.tut-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.tut-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(230, 236, 244, 0.12);
+}
+.tut-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.tut-section h2 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffd21e;
+}
+
+.tut-section p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #cdd6e2;
+}
+
+.tut-section strong {
+  color: #ffffff;
+}
+
+.tut-canvas {
+  width: 100%;
+  height: auto;
+  margin-top: 0.3rem;
+  background: #000;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(230, 236, 244, 0.14);
+}
+
+.tut-interactive {
+  cursor: pointer;
+  border-color: rgba(111, 210, 255, 0.5);
+  /* pan-y, not none: the boost illustration is swiped left and right, and the tutorial it
+     sits in is scrolled up and down. Each direction goes where it is wanted. */
+  touch-action: pan-y;
+}
+
+.tut-hint {
+  font-size: 0.85rem;
+  color: #6fd2ff;
+  text-align: center;
+  margin-top: -0.2rem;
+}
+
+.tut-close {
+  margin: 0.8rem 0 0;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: #dadada;
+  color: #000;
+  font-family: "HostGrotesk", system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}

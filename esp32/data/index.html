@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <title>Train Tango</title>
+    <script>
+      const DEBUG = false;
+      window.__booted = false;
+      setTimeout(
+        function () {
+          if (!window.__booted) location.reload();
+        },
+        6000 + Math.random() * 2000,
+      );
+    </script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="intro1" class="intro-overlay">
+      <svg
+        class="intro1-logo"
+        viewBox="0 0 161 239"
+        fill="none"
+        role="img"
+        aria-label="Casquè Labs"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M29.8057 231.451L31.8667 230.832L33.0827 228.833L35.8238 230.585L34.0926 233.182L29.8057 234.398L24.4059 232.172L22.4685 226.525L24.344 220.878L29.682 218.652L34.0514 219.847L35.8238 222.526L33.0827 224.237L31.8255 222.197L30.1561 221.64L27.0852 222.712L25.9516 226.525L27.0027 230.152L29.8057 231.451Z"
+          fill="white"
+        />
+        <path
+          d="M43.1554 227.225V226.958L42.7844 225.906L41.4241 225.371L40.0845 225.886L39.5074 226.978L37.096 225.742L38.6418 223.516L41.5684 222.815L44.9897 223.866L46.2469 227.246V233.944H43.2791V232.831L41.857 234.068L40.1463 234.357L37.5907 233.573L36.5189 231.286L37.6731 228.73L43.1554 227.225ZM40.0639 230.111L39.6517 231.08L39.9402 231.718L40.8883 232.007L42.2485 231.595L43.1348 230.585L43.1554 229.122L40.0639 230.111Z"
+          fill="white"
+        />
+        <path
+          d="M49.4993 230.461L50.1176 231.554L51.4985 231.945L52.6938 231.718L53.2503 230.853L52.9824 230.255L52.4053 229.987L49.829 229.41L47.9535 228.421L47.1497 226.298L48.4894 223.619L51.4778 222.815L54.5694 223.742L55.2289 225.02L53.0854 226.422L52.4671 225.474L51.3954 225.206L50.2618 225.453L49.8084 226.195L49.9939 226.669L50.5916 226.958L53.106 227.493L55.0022 228.38L55.9914 230.77L54.7136 233.47L51.4572 234.357L48.3245 233.347L47.3146 231.677L49.4993 230.461Z"
+          fill="white"
+        />
+        <path
+          d="M66.6623 223.227V238.066H63.5502V233.017L62.3754 234.089L61.0152 234.336L57.6351 232.893L56.1924 228.544L57.5733 224.216L60.9121 222.774L62.5609 223.165L63.7563 224.484V223.227H66.6623ZM61.5922 231.718L63.1792 230.935L63.7975 228.544L63.1586 226.154L61.5716 225.391L59.9846 226.154L59.3457 228.544L59.964 230.935L61.5922 231.718Z"
+          fill="white"
+        />
+        <path
+          d="M78.0809 223.227V233.965H75.1543V232.399L73.8147 233.924L72.1246 234.357L68.9713 233.079L68.1881 229.822V223.227H71.3002V229.74L71.6712 231.203L72.9697 231.718L74.3711 231.038L74.9688 229.06V223.227H78.0809Z"
+          fill="white"
+        />
+        <path
+          d="M83.7896 215.457L85.7888 220.424L83.7896 221.743L80.9042 217.374L83.7896 215.457ZM82.7797 231.183L84.5316 231.739L85.7476 231.368L86.4277 230.482L88.6124 232.11L87.52 233.532L84.3049 234.357L80.5538 232.996L78.905 228.586L80.5538 224.175L84.3049 222.815L87.9735 224.093L89.5604 228.132V229.019L89.4162 229.472H82.0378L82.7797 231.183ZM82.0996 227.37H86.3659L85.727 225.948L84.2224 225.432L82.8003 225.948L82.0996 227.37Z"
+          fill="white"
+        />
+        <path d="M107.078 233.944H95.99V219.105H99.2876V230.956H107.078V233.944Z" fill="white" />
+        <path
+          d="M114.203 227.225V226.958L113.832 225.906L112.472 225.371L111.132 225.886L110.555 226.978L108.144 225.742L109.689 223.516L112.616 222.815L116.037 223.866L117.295 227.246V233.944H114.327V232.831L112.905 234.068L111.194 234.357L108.638 233.573L107.567 231.286L108.721 228.73L114.203 227.225ZM111.111 230.111L110.699 231.08L110.988 231.718L111.936 232.007L113.296 231.595L114.182 230.585L114.203 229.122L111.111 230.111Z"
+          fill="white"
+        />
+        <path
+          d="M122.031 219.105V224.113L123.206 223.103L124.566 222.835L127.967 224.299L129.389 228.627L127.987 232.955L124.669 234.398L122.999 234.006L121.804 232.687V233.944H118.919V219.105H122.031ZM124.03 231.78L125.596 231.018L126.215 228.627L125.596 226.257L123.989 225.474L122.381 226.257L121.783 228.627L122.443 231.018L124.03 231.78Z"
+          fill="white"
+        />
+        <path
+          d="M131.884 230.461L132.502 231.554L133.883 231.945L135.079 231.718L135.635 230.853L135.367 230.255L134.79 229.987L132.214 229.41L130.338 228.421L129.535 226.298L130.874 223.619L133.863 222.815L136.954 223.742L137.614 225.02L135.47 226.422L134.852 225.474L133.78 225.206L132.647 225.453L132.193 226.195L132.379 226.669L132.976 226.958L135.491 227.493L137.387 228.38L138.376 230.77L137.098 233.47L133.842 234.357L130.709 233.347L129.699 231.677L131.884 230.461Z"
+          fill="white"
+        />
+        <path
+          d="M119.624 9.29688L117.772 23.6963L115.469 26.1768V28.7139L111.947 32.8223L121.405 39.2412L120.614 57.2285L115.579 75.9316L131.26 109.786L139.611 114.611L142.852 123.188L152.599 133.999L160.957 138.897L158.104 145.432L159.245 149.538L154.794 152.115L148.585 159.526L134.181 156.517L129.503 144.265L134.827 139.491L134.152 137.803L122.256 133.93L124.503 174.199L123.264 180.568L127.175 191.889L116.923 195.99L108.454 185.616L107.317 181.448L103.498 175.337V173.616L103.409 174.481L99.0781 177.91V183.138L93.5791 186.964L86.7393 184.569L82.4062 177.822L76.4268 174.481L73.4805 177.91L69.0605 179.741L64.8691 175.189L62.501 178.504L61.1416 185.082L54.6953 186.003L45.2363 190.884L33.7178 189.443L35.4219 183.647L45.4121 176.154V173.445L32.4121 180.11L14.917 194.29L11.2334 190.884L21.915 182.544L7.73438 187.885L0 182.544L13.7383 175.077L22.625 173.445L35.168 163.948L45.4268 156.029L51.2041 147.724L57.2207 126.477L47.8545 106.093L48.708 93.2891L57.8477 90.6426L66.0654 97.0352L67.457 88.1299L77.9053 62.1025L78.2812 34.9854L86.9238 28.917L87.4766 26.1768L92.1582 22.1973L90.7158 11.3818L97.874 0.644531L109.904 0L119.624 9.29688Z"
+          fill="white"
+        />
+      </svg>
+    </div>
+    <div id="intro2" class="intro-overlay hidden">
+      <img class="intro2-title" alt="Train Tango" />
+      <button id="tapToJoin" class="tap-to-join hidden">tap to join</button>
+    </div>
+
+    <div id="lobby" class="screen">
+      <div class="lobby-inner">
+        <div id="clock" class="clock">00:00:00.000</div>
+        <button id="helpBtn" class="help-btn">How to play?</button>
+        <h1 class="visually-hidden">Train Tango</h1>
+        <div class="lobby-title" aria-hidden="true">Lobby</div>
+        <p id="status" class="status">Connecting…</p>
+
+        <!-- No count and no "you are" line: the frame below says both -- four places, the
+             taken ones carrying a shape, yours the one labelled "you". -->
+        <div class="device-area">
+          <div id="phoneList" class="device-list"></div>
+        </div>
+
+        <div class="lobby-bottom">
+          <svg class="train tg-warp" viewBox="0 0 220 34" fill="none" aria-hidden="true">
+            <rect x="1" y="8" width="34" height="18" rx="4" stroke="#6f6f6f" stroke-width="2" />
+            <rect x="41" y="8" width="34" height="18" rx="4" stroke="#6f6f6f" stroke-width="2" />
+            <rect x="81" y="8" width="34" height="18" rx="4" stroke="#6f6f6f" stroke-width="2" />
+            <rect x="121" y="8" width="34" height="18" rx="4" stroke="#6f6f6f" stroke-width="2" />
+            <path
+              d="M161 26 V12 a4 4 0 0 1 4-4 h30 l22 12 v6 a0 0 0 0 1 0 0 h-52 a4 4 0 0 1 -4-4 z"
+              stroke="#6f6f6f"
+              stroke-width="2"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <div class="ready-toggle" id="readyToggle" role="switch" aria-label="Ready">
+            <div class="rt-knob"></div>
+            <span class="rt-label rt-left">Not Ready</span>
+            <span class="rt-label rt-right">Ready!</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="reconnectModal" class="reconnect-modal hidden">
+        <div class="reconnect-card">
+          <h2>Disconnected</h2>
+          <p>Trying to reconnect…</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="tutorial" class="screen hidden">
+      <div class="tut-inner">
+        <button id="tutBackBtn" class="tut-back" aria-label="Back">‹ back</button>
+        <h1 class="visually-hidden">How to play</h1>
+        <div class="tut-title" aria-hidden="true">how to play</div>
+        <div class="tut-scroll">
+          <section class="tut-section">
+            <h2>The board</h2>
+            <p>
+              Every phone becomes one tile of a shared track. A single loop of rail winds around the outside of all the
+              phones, and trains run around it continuously, crossing from one screen to the next.
+            </p>
+            <canvas class="tut-canvas" data-tut="board" width="280" height="180"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>Trains</h2>
+            <p>
+              Each train is a locomotive (triangle) plus a few cars (circles). Every car holds one passenger, and trains
+              never turn around — they just keep looping.
+            </p>
+            <p>
+              A train carries only <strong>one color at a time</strong>. Once someone boards, only that color can join
+              until the train empties out. The locomotive tints to the color it's carrying.
+            </p>
+            <canvas class="tut-canvas" data-tut="train" width="280" height="120"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>Stations</h2>
+            <p>
+              Stations are colored platforms beside the track. The gate is <strong>closed</strong> by default, so trains
+              stop to drop off matching passengers and pick up the queue.
+            </p>
+            <p>
+              When boarding ends the train <strong>waits</strong> — tap the gate to <strong>open</strong> it and send it
+              off. The gate <strong>auto-closes</strong> once the last car clears. Open it before a train arrives to let
+              it blow past.
+            </p>
+            <canvas class="tut-canvas tut-interactive" data-tut="station" width="280" height="130"></canvas>
+            <p class="tut-hint">Wait for the train to board, then tap the gate to release it.</p>
+          </section>
+          <section class="tut-section">
+            <h2>Passengers</h2>
+            <p>
+              Passengers wait in a station's queue, each with a color. A train drops them only at a station of that same
+              color. Each delivery scores points.
+            </p>
+            <canvas class="tut-canvas" data-tut="passengers" width="340" height="140"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>Junctions</h2>
+            <p>
+              A junction is a tunnel shortcut. Its two mouths sit <strong>roughly opposite</strong> on the loop, so
+              diverting a train cuts its trip about in half.
+            </p>
+            <p>
+              Tap the lever to divert; tap again for straight. Handy for rushing a train to the far side of the board.
+            </p>
+            <canvas class="tut-canvas tut-interactive" data-tut="junction" width="280" height="160"></canvas>
+            <p class="tut-hint">Tap the lever to toggle the diversion.</p>
+          </section>
+          <section class="tut-section">
+            <h2>Boost pads</h2>
+            <p>
+              The run of white arrows is a boost pad. <strong>Swipe along it</strong>, the way the arrows point, to arm
+              it: the arrows light one by one under your finger and the whole run turns bright blue once it takes. The
+              next train over gets a 3× burst for 6 seconds, then the pad recharges. Swipe back the other way to disarm
+              it.
+            </p>
+            <p>
+              Pads are swiped rather than tapped so they can sit right next to a station gate without the two stealing
+              each other&rsquo;s taps.
+            </p>
+            <canvas class="tut-canvas tut-interactive" data-tut="boost" width="280" height="130"></canvas>
+            <p class="tut-hint">Swipe along the arrows to arm the pad.</p>
+          </section>
+          <section class="tut-section">
+            <h2>Powerups</h2>
+            <p>
+              Each powerup exists <strong>once in the whole game</strong> and is dealt to <strong>one phone</strong>, so
+              you each hold different ones — say out loud what you have. Tap to buy with points; the ring around the
+              button fills as you can afford it.
+            </p>
+            <p>
+              The ring is cut into <strong>one band per level</strong>. Points fill it band by band, and the moment the
+              first band is full the powerup is <strong>ready to tap</strong>. Fill further bands and you can buy
+              further levels — a ring filled to the top means you can max it out right now.
+            </p>
+            <p>
+              Every level you buy turns a band <strong>orange</strong> and adds <strong>30 seconds</strong>. The orange
+              then burns back down one band at a time, and <strong>the bands still lit are your level</strong> — buy all
+              three and you run at level 3 for 30 seconds, level 2 for the next 30, level 1 for the last 30.
+            </p>
+            <p>
+              So topping up is never wasted: a level bought late just stacks another 30 seconds on the end. Buy early
+              and you spend longer at the <em>top</em> level, which is the real reason to commit.
+            </p>
+            <p>
+              The five: <strong>faster boarding</strong>, <strong>more cars</strong> per train, <strong>freeze</strong>,
+              <strong>one extra train</strong>, and <strong>reverse direction</strong>.
+            </p>
+            <canvas class="tut-canvas" data-tut="upgrades" width="280" height="104"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>Freeze — and pointing it</h2>
+            <p>
+              Freeze and the extra train need a <strong>second tap to pick a target</strong>, and that tap can come from
+              <strong>any phone</strong>. Buy one and <strong>the game stops</strong>: every screen dims down to just
+              the things you can tap, and nothing moves until somebody picks. Take your time — the clock doesn't start
+              running until play resumes. Each freeze level lets you ice <strong>one more station</strong>.
+            </p>
+            <p>
+              For a freeze, tap a <strong>station</strong>. For the extra train, tap
+              <strong>anywhere on the track</strong>
+              — it snaps to the nearest point, and slides clear if a train is already sitting there.
+            </p>
+            <p>
+              A frozen station ices over: it takes <strong>no new passengers</strong>, and its overflow and
+              double-points timers <strong>pause</strong>. Use it to rescue a station near overflow.
+            </p>
+            <canvas class="tut-canvas tut-interactive" data-tut="freeze" width="280" height="150"></canvas>
+            <p class="tut-hint">Tap the snowflake to arm it, then tap the station to freeze it.</p>
+          </section>
+          <section class="tut-section">
+            <h2>Reverse direction</h2>
+            <p>
+              Flips every train to run the other way around the loop — clockwise to counter-clockwise. It happens
+              <strong>instantly</strong> and <strong>stays</strong> until someone buys it again, so it is the one
+              powerup with no timer. Stations get served in the opposite order, which can rescue a queue you were never
+              going to reach in time.
+            </p>
+            <canvas class="tut-canvas" data-tut="reverse" width="280" height="150"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>Double-points window</h2>
+            <p>
+              Every few minutes one color grows a dashed ring. It draws closed (arming), then marches — while marching,
+              deliveries to that color pay <strong>2×</strong>. Prioritize it!
+            </p>
+            <canvas class="tut-canvas" data-tut="bonus" width="280" height="180"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>Full train — double points</h2>
+            <p>
+              Fill <strong>every</strong> car and the whole train tints to its color — it's <strong>full</strong>. Every
+              delivery then pays <strong>2×</strong>, so top a train up before unloading. It stays latched until the
+              train empties.
+            </p>
+            <p>
+              This stacks with the double-points window — a full train delivered to a bonus color scores
+              <strong>4×</strong>.
+            </p>
+            <canvas class="tut-canvas" data-tut="fulltrain" width="280" height="120"></canvas>
+          </section>
+          <section class="tut-section">
+            <h2>It gets harder</h2>
+            <p>
+              Trains get <strong>faster on their own</strong> as the game goes on — that is not something you buy any
+              more, and it tops out after about eight minutes. Passengers also arrive quicker and the track starts to
+              wobble. Coordinate, spend your powerups, and don't let any station overflow.
+            </p>
+          </section>
+          <section class="tut-section">
+            <h2>Overflow — game over!</h2>
+            <p>
+              If a station's queue fills up and stays full too long, the game ends. A full station
+              <strong>blinks</strong>
+              as a warning — open its gate and route a train there fast.
+            </p>
+            <canvas class="tut-canvas" data-tut="overflow" width="280" height="180"></canvas>
+          </section>
+          <button id="tutCloseBtn" class="tut-close">Got it!</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="play" class="screen hidden">
+      <canvas id="board"></canvas>
+      <div id="hud" class="hud">
+        <div id="puPrompt" class="pu-prompt" hidden>
+          <span id="puPromptText"></span>
+          <button id="puCancelBtn" class="pu-cancel" aria-label="Cancel and resume">&#10005;</button>
+        </div>
+        <!-- Score and powerups share one row. Score first so it holds a fixed spot: a phone
+             is dealt a varying number of powerups, and a trailing score would slide with the
+             button count. -->
+        <div class="hud-main">
+          <span class="pslot-icon hud-icon"></span>
+          <div class="score">
+            <span class="score-label">points</span>
+            <span id="scoreVal">0</span>
+            <div id="scorePops" class="score-pops" aria-hidden="true"></div>
+          </div>
+          <div id="upgrades" class="upgrades"></div>
+        </div>
+      </div>
+      <div id="menuOverlay" class="menu-overlay hidden">
+        <button id="closeMenuBtn">Close</button>
+        <button id="flipHudBtn">Flip HUD 180&deg;</button>
+        <button id="lobbyBtn" class="danger">Exit game</button>
+      </div>
+      <div id="gameover" class="gameover hidden">
+        <div class="gameover-card">
+          <!-- The heading stays for screen readers -- the card IS the end of the run, and
+               nothing else on it says so now that the stencilled title is gone. -->
+          <h1 class="visually-hidden">Game over</h1>
+          <div class="info gameover-info">
+            <div class="info-row">
+              <span class="label">Final score:</span>
+              <span class="lead"></span>
+              <span id="finalScore" class="val">0</span>
+            </div>
+            <div class="info-row">
+              <span class="label">Rank</span>
+              <span class="lead"></span>
+              <span id="leagueRank" class="val rank"
+                >Mark <span id="leagueRoman" class="roman">I</span> <span id="leagueType">Local</span></span
+              >
+            </div>
+            <div class="info-row">
+              <span class="label">Time survived:</span>
+              <span class="lead"></span>
+              <span id="finalTime" class="val">0:00</span>
+            </div>
+          </div>
+          <div id="leagueProg" class="league-prog"></div>
+          <div id="gameoverMain" class="gameover-actions">
+            <button id="gameoverBtn" class="ghost">Back to lobby</button>
+            <button id="retryBtn" class="primary">Retry</button>
+          </div>
+          <div id="retryChoice" class="gameover-actions hidden">
+            <button id="retryCancelBtn" class="ghost">Cancel</button>
+            <button id="retryKeepBtn" class="primary">Keep layout</button>
+            <button id="retryNewBtn" class="primary">New layout</button>
+          </div>
+        </div>
+      </div>
+      <div id="placeConfirm" class="place-confirm hidden">
+        <div class="place-card">
+          <button id="placeLobbyBtn" class="place-back">&larr; Back to lobby</button>
+          <h2>TRACK LAYOUT</h2>
+          <p id="placeStatus" class="place-status">
+            Line the phones up side by side so the matching colored edges touch.
+          </p>
+          <button id="placeBtn">Placement is correct</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="client.js" onerror="location.reload()"></script>
+  </body>
+</html>
