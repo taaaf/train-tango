@@ -4,6 +4,8 @@ This is a work in progress.
 
 A multiplayer train game that runs entirely on an ESP32. The board hosts its own WiFi access point and a small web server; players join from their phones' browsers, each phone becomes a tile of the shared board.
 
+See screenshot and gameplay [here.](https://traintango.com)
+
 ## How it works
 
 - The ESP32 runs an access point ("Connect & go to 4.3.2.1 to play") and serves a small
